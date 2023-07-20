@@ -9,7 +9,9 @@ function App() {
   return (
     <div className="App">
    
-    <Home />
+    {/* <Home /> */}
+    <Login />
+     <Register /> 
     </div>
   );
 }
