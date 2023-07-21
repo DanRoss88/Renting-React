@@ -191,6 +191,19 @@ export default function Register() {
       </Form.Item>
 
       <Form.Item
+        name="FullName"
+        label="Full Name"
+        rules={[
+          {
+            required: true,
+            message: 'Please enter your full name',
+          },
+        ]}
+      >
+        <Input />
+      </Form.Item>
+
+      <Form.Item
         name="Location"
         label="Location"
         rules={[
