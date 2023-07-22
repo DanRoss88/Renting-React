@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Checkbox, Form, Input } from 'antd';
-const onFinish = (values) => {
-  console.log('Success:', values);
-};
-const onFinishFailed = (errorInfo) => {
-  console.log('Failed:', errorInfo);
-};
-export default function Login() {
+
+export default function Login(props) {
+  const { loginHandler, userNameHandler, passwordHandler} = props;
+  
+
+
+
+
+
 
 return (
 
@@ -24,8 +26,7 @@ return (
     initialValues={{
       remember: true,
     }}
-    onFinish={onFinish}
-    onFinishFailed={onFinishFailed}
+    
     autoComplete="off"
   >
     <Form.Item
@@ -38,7 +39,7 @@ return (
         },
       ]}
     >
-      <Input />
+      <Input onChange={(text) => userNameHandler(text)}/>
     </Form.Item>
 
     <Form.Item
@@ -51,7 +52,7 @@ return (
         },
       ]}
     >
-      <Input.Password />
+      <Input.Password onChange={(text) => passwordHandler(text)} />
     </Form.Item>
 
     <Form.Item
@@ -71,7 +72,7 @@ return (
         span: 16,
       }}
     >
-      <Button type="primary" htmlType="submit">
+      <Button onPress={loginHandler} type="primary" htmlType="submit">
         Submit
       </Button>
     </Form.Item>
