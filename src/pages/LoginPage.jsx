@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Login from "../components/Login";
 import { storeToken, getToken, removeToken } from "../helpers/tokenStorage";
 import axios from "axios";
-import Home from "./Home";
+import  Home from "./Home";
 
 export default function LoginPage() {
   const [userName, setUserName] = useState("");

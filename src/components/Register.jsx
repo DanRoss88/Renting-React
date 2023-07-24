@@ -9,10 +9,16 @@ import {
   Upload,
   Row,
   Select,
+} from "antd";
+import { UploadOutlined } from "@ant-design/icons";
+import { Link, useNavigate } from "react-router-dom";
+import React, { useState } from "react";
+import axios from "axios";
+import {ToastContainer, toast } from "react-toastify";
 
-} from 'antd';
-import { UploadOutlined } from '@ant-design/icons';
-import React, { useState } from 'react';
+
+
+
 const { Option } = Select;
 
 const formItemLayout = {
@@ -45,18 +51,123 @@ const tailFormItemLayout = {
     },
   },
 };
+
+
+
 export default function Register() {
+
+  const navigate = useNavigate();
+  const [inputValue, setInputValue] = useState({
+    email: "",
+    password: "",
+    username: "",
+    location: "",
+    phone: "",
+    userType: "",
+    website: "",
+    bio: "",
+    verification: "",
+    verificationFile: "",
+    agreement: "",
+  });
+
+  const {
+    email,
+    password,
+    username,
+    location,
+    phone,
+    userType,
+    website,
+    bio,
+    verification,
+    verificationFile,
+    agreement
+  } = inputValue;
+
+  const userTypeHandler = (value) => {
+    if (value === "Owner") {
+      setInputValue({ ...inputValue, userType: value, owner: true, renter: false });
+    } else {
+      setInputValue({ ...inputValue, userType: value, owner: false, renter: true });
+    }
+  };
+
+  const handleOnChange = (e) => {
+    const { name, value } = e.target;
+    setInputValue({ ...inputValue, [name]: value });
+  };
+
+  const handleError = (error) => {
+    toast.error(error, {
+      position: toast.POSITION.TOP_CENTER,
+    });
+  };
+  const handleSuccess = (message) => {
+    toast.success(message, {
+      position: toast.POSITION.TOP_CENTER,
+    });
+  };
+
+  const handleOnSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const { data } = await axios.post("/register", {
+        email,
+        password,
+        username,
+        location,
+        phone,
+        owner,
+        renter,
+        website,
+        bio,
+        verification,
+        verificationFile,
+        agreement
+      },
+        {withCredentials: true}
+      );
+      const { success, message } = data;
+      if (success) {
+      handleSuccess(message);
+      setTimeout(() => {
+        navigate("/");
+      }, 1000);
+      } else {
+        handleError(message);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    setInputValue({
+      ...inputValue,
+      email: "",
+      password: "",
+      username: "",
+      location: "",
+      phone: "",
+      userType: "",
+      website: "",
+      bio: "",
+      verification: "",
+      verificationFile: "",
+      agreement: "",
+    });
+  };
+
+
   const [form] = Form.useForm();
   const [fileList, setFileList] = useState([
     {
-      uid: '-1',
-      name: 'xxx.png',
-      status: 'done',
-      url: 'http://www.baidu.com/xxx.png',
+      uid: "-1",
+      name: " ",
+      status: "",
+      url: " ",
     },
   ]);
   const onFinish = (values) => {
-    console.log('Received values of form: ', values);
+    console.log("Received values of form: ", values);
   };
   const prefixSelector = (
     <Form.Item name="prefix" noStyle>
@@ -66,17 +177,18 @@ export default function Register() {
         }}
       >
         <Option value="86">+1</Option>
-        
       </Select>
     </Form.Item>
   );
-  
+
   const [autoCompleteResult, setAutoCompleteResult] = useState([]);
   const onWebsiteChange = (value) => {
     if (!value) {
       setAutoCompleteResult([]);
     } else {
-      setAutoCompleteResult(['.com', '.org', '.net'].map((domain) => `${value}${domain}`));
+      setAutoCompleteResult(
+        [".com", ".org", ".net"].map((domain) => `${value}${domain}`)
+      );
     }
   };
   const websiteOptions = autoCompleteResult.map((website) => ({
@@ -101,37 +213,38 @@ export default function Register() {
     setFileList(newFileList);
   };
   const props = {
-    action: 'https://www.mocky.io/v2/5cc8019d300000980a055e76',
+    action: "https://www.mocky.io/v2/5cc8019d300000980a055e76",
     onChange: handleChange,
     multiple: true,
   };
 
   return (
+    <>
     <Form
       {...formItemLayout}
       form={form}
       name="register"
       onFinish={onFinish}
       initialValues={{
-        
-        prefix: '+1',
+        prefix: "+1",
       }}
       style={{
         maxWidth: 600,
       }}
       scrollToFirstError
+      onSubmit={handleOnSubmit}
     >
       <Form.Item
         name="email"
         label="E-mail"
         rules={[
           {
-            type: 'email',
-            message: 'The input is not valid E-mail!',
+            type: "email",
+            message: "The input is not valid E-mail!",
           },
           {
             required: true,
-            message: 'Please input your E-mail!',
+            message: "Please input your E-mail!",
           },
         ]}
       >
@@ -144,7 +257,7 @@ export default function Register() {
         rules={[
           {
             required: true,
-            message: 'Please input your password!',
+            message: "Please input your password!",
           },
         ]}
         hasFeedback
@@ -155,49 +268,51 @@ export default function Register() {
       <Form.Item
         name="confirm"
         label="Confirm Password"
-        dependencies={['password']}
+        dependencies={["password"]}
         hasFeedback
         rules={[
           {
             required: true,
-            message: 'Please confirm your password!',
+            message: "Please confirm your password!",
           },
           ({ getFieldValue }) => ({
             validator(_, value) {
-              if (!value || getFieldValue('password') === value) {
+              if (!value || getFieldValue("password") === value) {
                 return Promise.resolve();
               }
-              return Promise.reject(new Error('The new password that you entered do not match!'));
+              return Promise.reject(
+                new Error("The new password that you entered do not match!")
+              );
             },
           }),
         ]}
       >
-        <Input.Password />
+        <Input.Password onChange={handleOnChange} />
       </Form.Item>
 
       <Form.Item
-        name="Username"
+        name="username"
         label="Username"
         tooltip="What do you want others to call you?"
         rules={[
           {
             required: true,
-            message: 'Please enter your Username',
+            message: "Please enter your Username",
             whitespace: true,
           },
         ]}
       >
-        <Input />
+        <Input onChange={handleOnChange}/>
       </Form.Item>
 
       <Form.Item
-        name="Location"
+        name="location"
         label="Location"
         rules={[
           {
-            type: 'array',
+            type: "array",
             required: true,
-            message: 'Please enter your Location',
+            message: "Please enter your Location",
             whitespace: true,
           },
         ]}
@@ -211,56 +326,60 @@ export default function Register() {
         rules={[
           {
             required: true,
-            message: 'Please input your phone number!',
+            message: "Please input your phone number!",
           },
         ]}
       >
         <Input
           addonBefore={prefixSelector}
           style={{
-            width: '100%',
+            width: "100%",
           }}
         />
       </Form.Item>
 
       <Form.Item
-        name="UserType"
+        name="userType"
         label="User Type"
         rules={[
           {
             required: true,
-            message: 'Please select your User Type',
+            message: "Please select your User Type",
           },
         ]}
       >
-        <Cascader options={[
-          {
-            value: 'Owner',
-            label: 'Owner',
-          },
-          {
-            value: 'Renter',
-            label: 'Renter',
-          },
-        ]} />
+        <Cascader
+          options={[
+            {
+              value: "Owner",
+              label: "Owner",
+            },
+            {
+              value: "Renter",
+              label: "Renter",
+            },
+          ]}
+          onChange={userTypeHandler}
+        />
       </Form.Item>
 
-      <Form.Item
-        name="website"
-        label="Website"
-      >
-        <AutoComplete options={websiteOptions} onChange={onWebsiteChange} placeholder="Website">
+      <Form.Item name="website" label="Website">
+        <AutoComplete
+          options={websiteOptions}
+          onChange={onWebsiteChange}
+          placeholder="Website"
+        >
           <Input />
         </AutoComplete>
       </Form.Item>
 
       <Form.Item
-        name="Bio"
+        name="bio"
         label="Bio"
         rules={[
           {
             required: true,
-            message: 'Please enter your Bio',
+            message: "Please enter your Bio",
           },
         ]}
       >
@@ -268,12 +387,12 @@ export default function Register() {
       </Form.Item>
 
       <Form.Item
-        name="Verification"
+        name="verification"
         label="Verification"
         rules={[
           {
             required: true,
-            message: 'Please upload Verification',
+            message: "Please upload Verification",
           },
         ]}
       >
@@ -285,40 +404,18 @@ export default function Register() {
       </Form.Item>
 
       <Form.Item
-        name="VerificationFile"
+        name="verificationFile"
         label="Verification File"
         rules={[
           {
             required: true,
-            message: 'Please upload Verification File',
+            message: "Please upload Verification File",
           },
         ]}
       >
         <Upload {...props} fileList={fileList}>
-      <Button icon={<UploadOutlined />}>Upload</Button>
-    </Upload>
-      </Form.Item>
-
-      <Form.Item label="Captcha" extra="We must make sure that your are human.">
-        <Row gutter={8}>
-          <Col span={12}>
-            <Form.Item
-              name="captcha"
-              noStyle
-              rules={[
-                {
-                  required: true,
-                  message: 'Please input the captcha you got!',
-                },
-              ]}
-            >
-              <Input />
-            </Form.Item>
-          </Col>
-          <Col span={12}>
-            <Button>Get Captcha</Button>
-          </Col>
-        </Row>
+          <Button icon={<UploadOutlined />}>Upload</Button>
+        </Upload>
       </Form.Item>
 
       <Form.Item
@@ -327,7 +424,9 @@ export default function Register() {
         rules={[
           {
             validator: (_, value) =>
-              value ? Promise.resolve() : Promise.reject(new Error('Should accept agreement')),
+              value
+                ? Promise.resolve()
+                : Promise.reject(new Error("Should accept agreement")),
           },
         ]}
         {...tailFormItemLayout}
@@ -337,10 +436,12 @@ export default function Register() {
         </Checkbox>
       </Form.Item>
       <Form.Item {...tailFormItemLayout}>
-        <Button type="primary" htmlType="submit">
+        <Button type="primary" htmlType="submit" >
           Register
         </Button>
       </Form.Item>
     </Form>
+    <ToastContainer />
+    </>
   );
-};
+}
