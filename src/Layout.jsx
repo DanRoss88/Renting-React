@@ -41,7 +41,7 @@ export default function HomeLayout () {
         <div className="demo-logo" />
         <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['2']} items={items1} />
       </Header>
-      {/* <Content
+      <Content
         style={{
           padding: '0 50px',
         }}
@@ -51,10 +51,10 @@ export default function HomeLayout () {
             margin: '16px 0',
           }}
         >
-          <Breadcrumb.Item>Home</Breadcrumb.Item> */}
+          <Breadcrumb.Item>Home</Breadcrumb.Item> 
           {/* <Breadcrumb.Item>List</Breadcrumb.Item>
           <Breadcrumb.Item>App</Breadcrumb.Item> */}
-        {/* </Breadcrumb>
+         </Breadcrumb>
         <Layout
           style={{
             padding: '24px 0',
@@ -86,7 +86,7 @@ export default function HomeLayout () {
             Listings
           </Content>
         </Layout>
-      </Content> */}
+      </Content>
       <Footer
         style={{
           textAlign: 'center',

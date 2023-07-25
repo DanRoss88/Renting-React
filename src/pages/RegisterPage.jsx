@@ -1,15 +1,13 @@
 import React from 'react';
-import Register from '../components/Register';
-
+// import Register from '../components/Register';
+import Register from '../components/Signup';
 export default function RegisterPage() {
 
   return (
-    <div className="register-page">
-      <div className="register-page__form">
+    <>
         <Register>
 
         </Register>
-      </div>
-    </div>
+    </>
   )
 };
