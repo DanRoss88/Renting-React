@@ -2,10 +2,15 @@ import React from 'react';
 import { LaptopOutlined, NotificationOutlined, UserOutlined } from '@ant-design/icons';
 import { Breadcrumb, Layout, Menu, theme } from 'antd';
 const { Header, Content, Footer, Sider } = Layout;
-const items1 = ['Profile', 'Properties', 'Messages', 'Register', 'Login'].map((key) => ({
-  key,
-  label: `${key}`, 
-}));
+
+const items1 = [
+  { key: 'Profile', label: 'Profile', link: '/profile' },
+  { key: 'Properties', label: 'Properties', link: '/properties' },
+  { key: 'Messages', label: 'Messages', link: '/messages' },
+  { key: 'Register', label: 'Register', link: '/register' },
+  { key: 'Login', label: 'Login', link: '/login' },
+];
+
 const items2 = [UserOutlined, LaptopOutlined, NotificationOutlined].map((icon, index) => {
   const key = String(index + 1);
   return {

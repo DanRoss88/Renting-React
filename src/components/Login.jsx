@@ -1,9 +1,69 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Button, Checkbox, Form, Input } from 'antd';
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
 
-export default function Login(props) {
-  const { loginHandler, userNameHandler, passwordHandler} = props;
-  
+export default function Login() {
+ 
+  const navigate = useNavigate();
+  const [inputValue, setInputValue] = useState({
+    username: "",
+    password: "",
+  });
+  const { username, password } = inputValue;
+  const handleOnChange = (e) => {
+    const { name, value } = e.target;
+    setInputValue({
+      ...inputValue,
+      [name]: value,
+    });
+  };
+
+  const handleError = (message) => {
+    toast.error(message, {
+      position: "bottom-left",
+    });
+  };
+    const handleSuccess = (message) => {
+      toast.success(message, {
+        position: "bottom-left",
+      });
+    };
+
+      const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+          const data = await axios.post(
+            "/login",
+            {
+              ...inputValue,
+            },
+            { withCredentials: true }
+          );
+          console.log("Response data:", data);
+          console.log(data);
+          const { success, message } = data;
+          if (success) {
+            handleSuccess(message);
+            setTimeout(() => {
+              navigate("/");
+            }, 1000);
+          } else {
+            console.log("Login Error:", message);
+            handleError(message);
+          }
+        } catch (error) {
+          console.log(error);
+        }
+        setInputValue({
+          ...inputValue,
+          username: "",
+          password: "",
+        });
+      };
+
+
 
 
 
@@ -11,7 +71,7 @@ export default function Login(props) {
 
 
 return (
-
+<>
   <Form
     name="basic"
     labelCol={{
@@ -28,10 +88,12 @@ return (
     }}
     
     autoComplete="off"
+    onSubmit={handleSubmit}
   >
     <Form.Item
       label="Username"
       name="username"
+      // htmlFor='username'
       rules={[
         {
           required: true,
@@ -39,12 +101,13 @@ return (
         },
       ]}
     >
-      <Input onChange={(text) => userNameHandler(text)}/>
+      <Input onChange={handleOnChange} value={username} />
     </Form.Item>
 
     <Form.Item
       label="Password"
       name="password"
+      // htmlFor="password"
       rules={[
         {
           required: true,
@@ -52,7 +115,7 @@ return (
         },
       ]}
     >
-      <Input.Password onChange={(text) => passwordHandler(text)} />
+      <Input.Password onChange={handleOnChange} value={password} />
     </Form.Item>
 
     <Form.Item
@@ -63,7 +126,7 @@ return (
         span: 16,
       }}
     >
-      <Checkbox>Remember me</Checkbox>
+      <Checkbox >Remember me</Checkbox>
     </Form.Item>
 
     <Form.Item
@@ -72,11 +135,13 @@ return (
         span: 16,
       }}
     >
-      <Button onPress={loginHandler} type="primary" htmlType="submit">
+      <Button  type="submit" htmlType="submit">
         Submit
       </Button>
     </Form.Item>
   </Form>
+  <ToastContainer />
+  </>
 );
 
     }
