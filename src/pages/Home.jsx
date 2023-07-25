@@ -9,6 +9,8 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 import { Breadcrumb, Layout, Menu, theme} from "antd";
+import Map from "../components/Map";
+
 
 
 const { Header, Content, Footer, Sider } = Layout;
@@ -17,6 +19,8 @@ const { Header, Content, Footer, Sider } = Layout;
 
 
 export default function Home() {
+  
+ 
 
     const logOut = async () => {
     removeCookie("token");
@@ -190,7 +194,11 @@ export default function Home() {
                 padding: "0 24px",
                 minHeight: 280,
               }}
-            ></Content>
+            >
+              <>
+              <Map />                               
+</>
+            </Content>
           </Layout>
         </Content>
         <Footer

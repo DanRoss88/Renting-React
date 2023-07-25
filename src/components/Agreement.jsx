@@ -24,7 +24,7 @@ export default function Agreement() {
       </Button>
       <Modal
         title="Terms and Conditions for Renting Property Rental App"
-        visible={visible}
+        open={visible}
         onOk={handleOk}
         onCancel={handleCancel}
         width={800} // You can adjust the width of the modal as per your requirement
