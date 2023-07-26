@@ -8,36 +8,57 @@ import {
   NotificationOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import { Breadcrumb, Layout, Menu, theme} from "antd";
-import Map from "../components/Map";
-
-
+import { Breadcrumb, Layout, Menu, theme } from "antd";
+import Map from "../../components/map/Map";
 
 const { Header, Content, Footer, Sider } = Layout;
 
-
-
-
 export default function Home() {
-  
- 
+  const [apiKey, setApiKey] = useState("");
 
-    const logOut = async () => {
+  useEffect(() => {
+    const fetchApiKey = async () => {
+      try {
+        const response = await axios.get("http://localhost:8000/api/map");
+        const { apiKey } = await response.data;
+        setApiKey(apiKey);
+      } catch (err) {
+        console.log("Error fetching API key:", err);
+      }
+    };
+    fetchApiKey();
+  }, []);
+
+  const logOut = async () => {
     removeCookie("token");
     navigate("/register");
   };
-    
- 
+
   const items1 = [
     { key: "Profile", label: "Profile", link: "/profile", action: "profile" },
-    { key: "Properties", label: "Properties", link: "/properties", action: "properties" },
-    { key: "Messages", label: "Messages", link: "/messages", action: "messages" },
-    { key: "Register", label: "Register", link: "/register", action: "register" },
+    {
+      key: "Properties",
+      label: "Properties",
+      link: "/properties",
+      action: "properties",
+    },
+    {
+      key: "Messages",
+      label: "Messages",
+      link: "/messages",
+      action: "messages",
+    },
+    {
+      key: "Register",
+      label: "Register",
+      link: "/register",
+      action: "register",
+    },
     { key: "Login", label: "Login", link: "/login", action: "login" },
-    {key: "Home", label: "Home", link: "/", action: "home"},
-    {key: "Logout", label: "Logout", onClick: logOut}
+    { key: "Home", label: "Home", link: "/", action: "home" },
+    { key: "Logout", label: "Logout", onClick: logOut },
   ];
-  
+
   const items2 = [UserOutlined, LaptopOutlined, NotificationOutlined].map(
     (icon, index) => {
       const key = String(index + 1);
@@ -74,14 +95,12 @@ export default function Home() {
     }
   };
 
-
   const {
     token: { colorBgContainer },
   } = theme.useToken();
   const navigate = useNavigate();
   const [cookies, removeCookie] = useCookies([]);
   const [username, setUsername] = useState("");
-  
 
   useEffect(() => {
     const verifyCookie = async () => {
@@ -108,10 +127,14 @@ export default function Home() {
   }, [cookies, navigate, removeCookie]);
 
   const nameItem = [
-    { key: "username", label: username , link: "/profile", onClick: handleNameClick }
+    {
+      key: "username",
+      label: username,
+      link: "/profile",
+      onClick: handleNameClick,
+    },
   ];
 
-  
   return (
     <>
       <Layout>
@@ -121,10 +144,9 @@ export default function Home() {
             alignItems: "center",
           }}
         >
-          
           <Menu
             theme="dark"
-            mode= "horizontal"
+            mode="horizontal"
             defaultSelectedKeys={["8"]}
             onClick={({ key }) => {
               const item = items1.find((i) => i.key === key);
@@ -135,20 +157,17 @@ export default function Home() {
               <Menu.Item key={item.key}>{item.label}</Menu.Item>
             ))}
 
-
             <Menu.Item
-            style={
-              {
+              style={{
                 flex: "1",
                 textAlign: "right",
-              }
-            }
-            onClick={handleNameClick}
-            key={nameItem.key}
-            >Welcome <strong> {username} </strong></Menu.Item>
+              }}
+              onClick={handleNameClick}
+              key={nameItem.key}
+            >
+              Welcome <strong> {username} </strong>
+            </Menu.Item>
           </Menu>
-            
-          
         </Header>
         <Content
           style={{
@@ -170,34 +189,31 @@ export default function Home() {
               background: colorBgContainer,
             }}
           >
-              
-              <Sider
-                theme="dark"
-                width={200}
+            <Sider
+              theme="dark"
+              width={200}
+              style={{
+                background: colorBgContainer,
+              }}
+            >
+              <Menu
+                mode="inline"
+                defaultSelectedKeys={["1"]}
+                defaultOpenKeys={["sub1"]}
                 style={{
-                  background: colorBgContainer,
+                  height: "100%",
                 }}
-              >
-                <Menu
-                  mode="inline"
-                  defaultSelectedKeys={["1"]}
-                  defaultOpenKeys={["sub1"]}
-                  style={{
-                    height: "100%",
-                  }}
-                  items={items2}
-                />
-              </Sider>
-           
+                items={items2}
+              />
+            </Sider>
+
             <Content
               style={{
                 padding: "0 24px",
                 minHeight: 280,
               }}
             >
-              <>
-              <Map />                               
-</>
+              <>{apiKey ? <Map apiKey={apiKey} /> : <div>Loading...</div>}</>
             </Content>
           </Layout>
         </Content>
