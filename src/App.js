@@ -1,7 +1,7 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
 import { LoginPage, RegisterPage } from "./pages";
-import Home from "./pages/home/Home";
+import Home from "./pages/Home";
 
 // import HomeLayout from './Layout';
 
