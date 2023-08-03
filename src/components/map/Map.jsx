@@ -1,18 +1,7 @@
 import { GoogleMap, useJsApiLoader, Marker } from "@react-google-maps/api";
 import React, { useState, useEffect, useMemo } from "react";
 import ClipLoader from "react-spinners/ClipLoader";
-import usePlacesAutocomplete, {
-  getGeocode,
-  getLatLng,
-} from "use-places-autocomplete";
-import {
-  Combobox,
-  ComboboxInput,
-  ComboboxPopover,
-  ComboboxList,
-  ComboboxOption,
-} from "@reach/combobox";
-import "@reach/combobox/styles.css";
+import OwnersPropertySelector from "./PropertiesMap";
 import styles from "../../styles/Map.module.css"
 
 const containerStyle = {
@@ -28,6 +17,7 @@ const center = {
 
 const Map = ({ apiKey }) => {
   const { isLoaded, loadError } = useJsApiLoader({
+    id: "google-map-script",
     googleMapsApiKey: apiKey,
   });
 
@@ -54,51 +44,6 @@ const Map = ({ apiKey }) => {
     return <div>Error loading Google Maps</div>;
   }
 
-  const PlacesAutocomplete = ({ setSelected }) => {
-    const { ready, value, setValue, suggestions : {status, data}, clearSuggestions } =
-      usePlacesAutocomplete();
-
-      const handleSelect = async (address) => {
-        setValue(address, false);
-        clearSuggestions();
-      
-        const results = await getGeocode({ address });
-        const { lat, lng } = getLatLng(results[0]);
-        setSelected({ lat, lng });
-        
-      };
-
-    return (
-      <div>
-        <Combobox onSelect={handleSelect}>
-          <ComboboxInput
-            value={value}
-            onChange={(e) => setValue(e.target.value)} 
-            disabled={!ready}
-            className="combo_box"
-            placeholder="Search an Address"
-          />
-          <ComboboxPopover>
-            <ComboboxList>
-              { status === "OK" && 
-              data.map(({ place_id, description }) => ( 
-                <ComboboxOption
-                  key={place_id}
-                  value={description}
-                  className="combo_box_option"
-                />
-              ))}
-            </ComboboxList>
-          </ComboboxPopover>
-        </Combobox>
-      </div>
-    );
-  };
-  
-
-  
-
-
   return (
     <div style={containerStyle}>
       {loading && (
@@ -119,7 +64,7 @@ const Map = ({ apiKey }) => {
       {isLoaded && (
         <div>
           <div className={styles.propertiesContainer}>
-            <PlacesAutocomplete setSelected={setSelected} />
+            
           </div>
           <GoogleMap
             mapContainerStyle={containerStyle}

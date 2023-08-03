@@ -34,7 +34,7 @@ const Header = ({ items, handleNameClick, handleMenuClick, nameItem, logOut }) =
             flex: "1",
             textAlign: "right",
           }}
-          onClick={handleLogout}
+          onClick={handleLogout} 
           key={nameItem.key}
         >
           Welcome <strong> {nameItem.label} </strong>

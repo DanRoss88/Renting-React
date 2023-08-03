@@ -20,7 +20,7 @@ export default function Home() {
     removeCookie,
   } = useCookieManagement();
 
-  const { items1, items2, nameItem, handleMenuClick, handleNameClick, isLoggedIn } = generateMenuItems(navigate, logOut, username);
+  const { items1, nameItem, handleMenuClick,  handleNameClick, isLoggedIn } = generateMenuItems(navigate, logOut, username);
 
   useEffect(() => {
     const getApiKey = async () => {
@@ -68,7 +68,7 @@ export default function Home() {
             <Breadcrumb.Item>Home</Breadcrumb.Item>
           </Breadcrumb>
           <Layout style={{ padding: "24px 0", background: colorBgContainer }}>
-            <Sidebar items2={items2} />
+            <Sidebar  />
             <Content apiKey={apiKey} />
           </Layout>
         </Layout.Content>
