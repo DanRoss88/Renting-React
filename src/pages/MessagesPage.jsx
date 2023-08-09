@@ -13,4 +13,4 @@ const MessagesPage = ({ username }) => {
   )
 }
 
-export default MessagesPage
+export default MessagesPage;
