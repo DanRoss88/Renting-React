@@ -72,37 +72,38 @@ const Header = ({
         <Link to="/properties">Properties</Link>
       </Menu.Item>
 
-      <Menu.Item
+    
+
+      {isLoggedIn ? (
+        <Menu.Item
         style={{
           flex: "1",
           textAlign: "left",
         }}
+        onClick={handleLogout}
       >
         <Link to="/logout">Log Out</Link>
       </Menu.Item>
-
-      {isLoggedIn ? (
-        <Menu.Item
-          style={{
-            flex: "1",
-            textAlign: "right",
-          }}
-          onClick={handleLogout}
-          // key={nameItem.key}
-        >
-          Welcome <strong> </strong>
-        </Menu.Item>
       ) : (
+        <>
         <Menu.Item
           style={{
             flex: "1",
             textAlign: "right",
           }}
-          onClick={handleNameClick}
-          // key={nameItem.key}
         >
-          Welcome <strong>  </strong>
+          <Link to="/login">Log In</Link>
         </Menu.Item>
+
+        <Menu.Item
+          style={{
+            flex: "1",
+            textAlign: "right",
+          }}
+          >
+          <Link to="/register">Sign Up</Link>
+          </Menu.Item>
+</>
       )}
     </Menu>
   );

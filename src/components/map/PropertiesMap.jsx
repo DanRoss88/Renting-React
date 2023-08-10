@@ -10,12 +10,14 @@ import {
   ComboboxOption,
 } from "@reach/combobox";
 import "@reach/combobox/styles.css";
+import React, { useState } from "react";
 
 
 
-
- const OwnersPropertySelector = ({ setSelected }) => {
-  const { ready, value, setValue, suggestions : {status, data}, clearSuggestions } =
+ const OwnersPropertySelector = () => {
+  const [selected, setSelected] = useState(null);
+  const [value, setValue] = useState("");
+  const { ready, suggestions : {status, data}, clearSuggestions } =
     usePlacesAutocomplete();
 
     const handleSelect = async (address) => {
